@@ -1,0 +1,398 @@
+﻿@{ ViewData["Title"] = "Dashboard detail";
+    Layout = "_Layout"; }
+@*<h1>Active Users</h1>
+    <h2><span id="users"></span></h2>*@
+<style>
+    .form-control {
+        background-color: #f8f9fa;
+    }
+</style>
+<h5 class="mb-3">
+    <strong>Dashboard</strong>
+</h5>
+
+<!--Dashboard widget-->
+<div class="row" style="background: white; padding-top: 2%;">
+    <div class="col-md-10">
+
+        <div class="mt-1 mb-3 button-container">
+            <div class="row pl-0">
+                <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+
+                    <div class="row">
+                        <div class="col-md-1">Divisions</div>
+                        <div class="col-md-5"><select class="form-control" id="Ddl_Divisions" onchange="Division_Changed()"><option value="0"> -- Select Divisions --</option></select></div>
+                        <div class="col-md-1">Departments</div>
+                        <div class="col-md-5"><select class="form-control" id="Ddl_Departments" onchange="Departments_Changed()"><option value="0"> -- Select Departments --</option></select></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row pl-0">
+                <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+                    <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+
+                        <div class="row">
+                            <div class="col-md-1">Section</div>
+                            <div class="col-md-5"><select class="form-control" id="Ddl_Section" onchange="Section_Changed()"><option value="0"> -- Select Section --</option></select></div>
+                            <div class="col-md-1">License</div>
+                            <div class="col-md-5"><select class="form-control" id="Ddl_License" onchange="License_Changed()"><option value="0"> -- Select License --</option></select></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row pl-0">
+                <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+                    <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+
+                        <div class="row">
+                            <div class="col-md-1">ItemCateg</div>
+                            <div class="col-md-5"><select class="form-control" id="Ddl_ItemCateg" onchange="ItemCateg_Changed()"><option value="0"> -- Select ItemCateg --</option></select></div>
+                            <div class="col-md-1">ItemCategName</div>
+                            <div class="col-md-5"><select class="form-control" id="Ddl_ItemCategName"><option value="0"> -- Select ItemCategName --</option></select></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row pl-0">
+                <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+                    <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+
+                        <div class="row">
+                            <div class="col-md-1">ItemCode</div>
+                            <div class="col-md-5"><select class="form-control" id="Ddl_ItemCode" onchange="ItemCode_Changed()"><option value="0"> -- Select ItemCode --</option></select></div>
+                            <div class="col-md-1">itemName</div>
+                            <div class="col-md-5"><select class="form-control" id="Ddl_itemName"><option value="0"> -- Select itemName --</option></select></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-md-1">
+        <button type="button" class="btn btn-info" style="margin-top: 35%; height: 50%; width: 100%;">Search</button>
+    </div>
+    <div class="col-md-1">
+        <button type="button" class="btn btn-info"style="margin-top: 35%; height: 50%; width: 100%;">Reset</button>
+    </div>
+</div>
+
+    <!--/Dashboard widget-->
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col-xl-6 ">
+            <div class="card   button-container   shadow-sm  ">
+                <div class="card-header ">
+                    <h6 class="mb-2">Doughnut chart</h6>
+                </div>
+                <div class=" card-body">
+                    <div class="chart-container">
+                        <canvas id="doughnutChart" height="150px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6  ">
+            <div class="card   button-container panel-head-primary  shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">Doughnut chart</h6>
+                </div>
+                <div class=" card-body">
+                    <canvas id="barChart1" height="100px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-xl ">
+            <div class="card   button-container   shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">Detail</h6>
+                </div>
+                <div class=" card-body ">
+                    <table class="table table-sm text-sm-center" id="TableExam">
+                        <thead class="bg-light">
+                            <tr>
+                                <th scope="col">PLanRefID</th>
+                                <th scope="col">OperatorID</th>
+                                <th scope="col">OperationName</th>
+                                <th scope="col">ItemCateg</th>
+                                <th scope="col">itemCategName</th>
+                                <th scope="col">ItemCode</th>
+                                <th scope="col">ItemName</th>
+                                <th scope="col">Minute</th>
+                                <th scope="col">Start Time</th>
+                                <th scope="col">End Time</th>
+                                <th scope="col">Level</th>
+                                <th scope="col">Correct</th>
+                                <th scope="col">Wrong</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Result</th>
+                               
+                            </tr>
+                        </thead>
+                        @*<tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>xmdo</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>xfat</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td>Larry</td>
+                                    <td>the Bird</td>
+                                    <td>xtwitter</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @section scripts{
+        <!--Reference the autogenerated SignalR hub script. -->
+        <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+       
+
+
+
+
+      <link href="~/lib/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/colReorder.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/fixedColumns.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/fixedHeader.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/keyTable.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/rowGroup.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/rowReorder.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/scroller.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/select.bootstrap4.min.css" rel="stylesheet" />
+      <link href="~/lib/DataTables/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+        <script src="~/lib/DataTables/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.colReorder.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.fixedHeader.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.keyTable.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.responsive.min.js"></script>
+        <script src="~/lib/DataTables/js/responsive.bootstrap4.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.rowGroup.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.rowReorder.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.scroller.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.select.min.js"></script>
+        <script src="~/lib/DataTables/js/dataTables.buttons.min.js"></script>
+        <script src="~/lib/DataTables/js/buttons.bootstrap.min.js"></script>
+        <script src="~/lib/DataTables/js/buttons.flash.min.js"></script>
+        <script src="~/lib/DataTables/js/buttons.html5.min.js"></script>
+        <script src="~/lib/DataTables/js/buttons.print.min.js"></script>
+
+
+        <script>
+             $(document).ready(function () {
+                            get_Ddl_Division();
+
+                        $('#TableExam').DataTable({
+                            ajax: {
+                            url: 'Get_Datatable_Exam',
+                        dataSrc: '',
+                                            },
+                        pagingType: 'full_numbers',
+                        paging: true,
+                        ordering: true,
+                            info: true,
+                            scrollX: true,
+                                columns: [
+                                {data: 'planRefID' },
+                                {data: 'operatorID' },
+                                {data: 'operatorName' },
+                                {data: 'itemCateg' },
+                                {data: 'itemCategName' },
+                                {data: 'itemCode' },
+                                {data: 'itemName' },
+                                {data: 'minutes' },
+                                {data: 'startTime' },
+                                {data: 'endTime' },
+                                {data: 'level' },
+                                {data: 'correct' },
+                                {data: 'wrong' },
+                                {data: 'total' },
+                                {data: 'results' },
+
+                            ],
+                           
+
+                                });
+
+
+                                });
+                        function Division_Changed() {
+
+                                    var type_changed = "Division";
+                        var Division_val = $("#Ddl_Divisions").val();
+                        $.ajax({
+                            type: 'POST',
+                        data: {type: type_changed, value_key: Division_val },
+                        url: 'getDataDropdownlist',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                        var content = '<option value="0"> -- Select Departments -- </option>';
+                        for (var i = 0; i < data.length; i++) {
+                            content += '<option value="' + data[i].row_num + '">' + data[i].department + ' </option>';
+                                            }
+
+                        $("#Ddl_Departments").html(content);
+                                        }
+
+                                    })
+
+                                }
+
+                        function Departments_Changed() {
+                                    var type_changed = "Department";
+                        var Department_val = $("#Ddl_Departments").val();
+                        $.ajax({
+                            type: 'POST',
+                        data: {type: type_changed, value_key: Department_val },
+                        url: 'getDataDropdownlist',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                        var content = '<option value="0"> -- Select Departments -- </option>';
+                        for (var i = 0; i < data.length; i++) {
+                            content += '<option value="' + data[i].sectionCodeID + '">' + data[i].section + ' </option>';
+                                            }
+
+                        $("#Ddl_Section").html(content);
+                                        }
+
+                                    });
+
+                                }
+
+                        function Section_Changed() {
+                                    var type_changed = "Section";
+                        var Section_val = $("#Ddl_Section").val();
+                        var split_license = [];
+                        $.ajax({
+                            type: 'POST',
+                        data: {type: type_changed, value_key: Section_val },
+                        url: 'getDataDropdownlist',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                        var content = '<option value="0"> -- Select License -- </option>';
+                        for (var i = 0; i < data.length; i++) {
+                            split_license = data[i].license.split(";");
+                                                /* content += '<option value="' + data[i].License + '">' + data[i].License + ' </option>';*/
+                                            }
+                        for (var l = 0; l < split_license.length - 1; l++) {
+                            content += '<option value="' + split_license[l] + '">' + split_license[l] + ' </option>';
+                                            }
+                        console.log(split_license);
+                        $("#Ddl_License").html(content);
+                                        }
+
+                                    });
+
+                                }
+                        function License_Changed() {
+                                    var type_changed = "License";
+                        var License_val = $("#License").val();
+                        $.ajax({
+                            type: 'POST',
+                        data: {type: type_changed, value_key: License_val },
+                        url: 'getDataDropdownlist',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                        var content = '<option value="0"> -- Select ItemCategName -- </option>';
+                        for (var i = 0; i < data.length; i++) {
+                            content += '<option value="' + data[i].itemCateg + '">' + data[i].itemCategName + ' </option>';
+                                            }
+
+                        $("#Ddl_ItemCategName").html(content);
+                                        }
+
+                                    });
+
+                                }
+
+                        function get_Ddl_Division() {
+                            $.ajax({
+                                type: 'POST',
+                                url: 'getDdlDivision',
+                                dataType: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    var content = '<option value="0"> -- Select Divisions -- </option>';
+                                    for (var i = 0; i < data.length; i++) {
+                                        content += '<option value="' + data[i].row_num + '">' + data[i].divisionName + ' </option>';
+                                    }
+
+                                    $("#Ddl_Divisions").html(content);
+                                }
+
+                            })
+                        }
+        </script>
+        <script src="~/lib/microsoft-signalr/signalr.js"></script>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded',
+            function () {
+                function bindConnectionMessage(connection) {
+                    var messageCallback = function (message) {
+                        console.log('message' + message);
+                        if (!message) return;
+                        var userCountSpan = document.getElementById('users');
+                        userCountSpan.innerText = message;
+                    };
+                    connection.on("updateCount", messageCallback);
+                    connection.onclose(onConnectionError);
+                }
+
+                            function onConnected(connection) {
+                console.log('connection started');
+                            }
+
+            function onConnectionError(error) {
+                                if (error && error.message) {
+                //alert(error.message);
+                //console.error(error.message);
+            }
+                            }
+
+            var connection = new window.signalR.HubConnectionBuilder().configureLogging(window.signalR.LogLevel.Debug).withUrl('/DemoSkillTest/CounterHub').build();
+
+
+            bindConnectionMessage(connection);
+            connection.start()
+            .then(function () {
+                onConnected(connection);
+                                })
+            .catch(function (error) {
+                //alert(error.message);
+                //console.error(error.message);
+            });
+                        });</script>
+    }

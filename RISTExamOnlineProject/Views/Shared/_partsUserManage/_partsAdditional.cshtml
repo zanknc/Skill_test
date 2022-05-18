@@ -1,0 +1,392 @@
+﻿
+
+
+<h1>Additional Department</h1>
+
+<br />
+
+
+
+
+
+
+
+<div id="Form_Add">
+
+    <div class="row justify-content-center">
+
+        <div class="col-1">
+            Division
+        </div>
+        <div class="col-2">
+            @Html.DropDownList("DDL_Division", new MultiSelectList(string.Empty, "Value", "Text"), new { @id = "DDL_Division", @class = " custom-select" })
+
+        </div>
+        <div class="col-1">
+            Department
+        </div>
+        <div class="col-2">
+            @Html.DropDownList("DDL_Department", new MultiSelectList(string.Empty, "Value", "Text"), new { @id = "DDL_Department", @class = " custom-select" })
+
+        </div>
+        <div class="col-1">
+            Section
+        </div>
+        <div class="col-2">
+
+            @Html.DropDownList("DDL_Section", new MultiSelectList(string.Empty, "Value", "Text"), new { @id = "DDL_Section", @class = " custom-select" })
+
+        </div>
+        <div class="col-1">
+            <button class="btn btn-warning w-100 " id="BTN_ADD" >
+                ADD
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<br />
+
+
+
+
+
+
+
+
+<div id="display_grid">
+
+
+    <div class="row justify-content-lg-start">
+        <div class="col-1">
+
+            <button type="button" class="btn btn-danger text-white" id="BTN_Delete">
+                DELETE
+            </button>
+
+        </div>
+
+    </div>
+    <br />
+    <table class="table table-sm table-bordered table-striped  " style="font-size:small; color:black; width:100%; background-color:#fff;" id="MyTable">
+        <thead>
+            <tr>
+                <th style="text-align:center;" class="text-wrap">OperatorID</th>
+                <th style="text-align:center;" class="text-wrap">SectionCode</th>
+                <th style="text-align:center;" class="text-wrap">Division</th>
+                <th style="text-align:center;" class="text-wrap">Department</th>
+                <th style="text-align:center;" class="text-wrap">Section</th>
+                <th style="text-align:center;" class="text-wrap"> Delete </th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+    </table>
+
+    <br />
+
+    <div class="row justify-content-lg-center">
+        <div class="col-2">
+
+            <button type="button" class="btn btn-success w-100" id="BTN_Save">
+                <i class="fas fa-save"></i>   SAVE
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<script>
+
+    var TableTarget;
+
+
+    function Getinitial() {
+
+ 
+         var MakerID = '@User.Identity.Name';
+         var OPID = $("#strOPNo").val();
+
+        if (OPID != '') {
+        
+
+            MakeDataTemp(OPID, MakerID);
+      
+
+            var x = document.getElementById("display_grid");
+            x.style.display = "block";
+            var a = document.getElementById("Form_Add");
+            a.style.display = "block";
+
+
+        
+
+        } else {
+
+            var x = document.getElementById("display_grid");
+            x.style.display = "none";
+
+            var a = document.getElementById("Form_Add");
+            a.style.display = "none";
+
+
+
+
+        }
+
+
+
+    }
+
+
+    $("#DDL_Department").on("change", function () {
+    
+        var DIV = $("#DDL_Division").val();
+        var DEP = $("#DDL_Department").val();
+        if ($("#DDL_Department").val != 0) {
+            $("#DDL_Section option").remove();
+            GetSection_Addition(DIV, DEP);
+        } else {
+            $("#DDL_Section option").remove();
+        }
+    });
+
+
+
+    $("#DDL_Division").on("change", function () {
+   
+        var DIV = $("#DDL_Division").val();
+        if (DIV != 0) {
+            $("#DDL_Department option").remove();
+            $("#DDL_Section option").remove();
+            GetDepartment_Addition(DIV);
+        } else {
+            $("#DDL_Department option").remove();
+            $("#DDL_Section option").remove();
+        }
+
+
+
+    });
+
+
+
+
+    $('#BTN_Save').click(function (event) {
+
+         var MakerID = '@User.Identity.Name';
+         var OPID = $("#strOPNo").val();
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: "Are you sure you want to save Data ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Do it!'
+
+        }).then(function (result) {
+            if (result.value) {
+                SaveData(OPID, MakerID);
+            }
+
+        });
+
+
+    });
+
+
+
+
+
+
+    $('#BTN_ADD').click(function (event) {
+
+        var Sectioncode = $('#DDL_Section').val();
+
+        var MakerID = '@User.Identity.Name';
+         var OPID = $("#strOPNo").val();
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: "Are you sure you want to Insert new Section ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Do it!'
+
+        }).then(function (result) {
+            if (result.value) {
+
+                if (Sectioncode != "" && Sectioncode != "0") {
+
+
+                    AddData_Data(OPID, MakerID, Sectioncode);
+
+
+                }
+                else {
+
+                    Swal.fire({
+                        text: ('Please select section '),
+                        type: 'error',
+                       // timer: 1700,
+                    }).then(function () {
+                        return false;
+                    });
+
+                }
+
+            }
+
+        });
+
+
+    });
+
+
+
+    $('#BTN_Delete').click(function (event) {
+         var MakerID = '@User.Identity.Name';
+         var OPID = $("#strOPNo").val();
+
+        debugger;
+         Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: "Are you sure you want to Delete Section ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Do it!'
+
+        }).then(function (result) {
+            if (result.value) {
+
+                Delete_Data(OPID, MakerID);
+            }
+
+        });
+
+
+    });
+
+
+
+    function GetuserDetail() {
+        debugger;
+
+        var MakerID = '@User.Identity.Name';
+         var OPID = $("#strOPNo").val();
+
+
+        if (OPID != "") {
+
+
+            MakeDataTemp(OPID, MakerID);
+        //    Getdata(OPID)
+        } else {
+            return false;
+        }
+
+
+        return false;
+    }
+
+    function Getdata(OPID) {
+        debugger;
+        if (TableTarget != null) {
+            TableTarget.destroy();
+            TableTarget.clear();
+        }
+        debugger;
+        try {
+
+            TableTarget = $("#MyTable").DataTable({
+
+                searching: false,
+
+                ordering: true,
+                serverSide: true,
+
+                processing: true,
+                cache: true,
+                ajax: ({
+                    type: "post",
+                    url: "../Management/Load_OperatorAdditional_Detail",
+                    dataSrc: "data",
+                    data: { OPID: OPID },
+                    dataType: "json",
+
+                }),
+
+                dom: '<"top"l>rt<"bottom">ip<"clear">',
+                columns: [
+                    { data: "operatorID", name: "operatorID", class: "text-wrap text-center" },
+                    { data: "sectionCode", name: "sectionCode", class: "text-wrap text-center" },
+                    { data: "division", name: "division", class: "text-wrap text-center" },
+                    { data: "department", name: "department", class: "text-wrap text-center" },
+                    { data: "section", name: "section", class: "text-wrap text-center" },
+                    {
+                        //   data: "Delete",
+                        //  render: function (data, type, row),
+                        data: null,
+                        name: null,
+                        className: "center",
+                        "fnCreatedCell": function (nTd, oData ) {
+                            var Target = oData.sectionCode;
+
+                            $(nTd).html('<input type="checkbox"   class="editor-active" id="CB_Delete"  name="CB_Delete" value="' + Target + '"  />');
+
+                        }, className: "dt-body-center"
+                    },
+
+                ],
+                order: [1, "asc"],
+
+            });
+
+        } catch (e) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: ("table:" + e)
+            });
+
+
+        }
+        finally {
+
+            GetDivision_Addition();
+
+            var x = document.getElementById("display_grid");
+            x.style.display = "block";
+            var a = document.getElementById("Form_Add");
+            a.style.display = "block";
+            var t = document.getElementById("Display_tableAdd");
+            t.style.display = "none";
+
+        }
+
+
+    }
+
+
+</script>

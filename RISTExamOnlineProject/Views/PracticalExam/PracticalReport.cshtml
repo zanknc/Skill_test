@@ -1,0 +1,288 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "PracticalReport";
+    Layout = "~/Views/Shared/_Parctical_Layout.cshtml";
+}
+
+
+
+
+<div class="container">
+
+    @*<form asp-action="PracticalReport" >*@
+    
+    <form method="post">
+
+
+
+
+
+
+
+        <div class="row  justify-content-lg-center  justify-content-md-center  m-5 ">
+
+            <div class="col col-lg-5 col-md-5">
+
+                <div class="input-group mb-3">
+                    <div class="input-group-append ">
+                        <input type="text" class="form-control-lg " name="OPID" id="TB_OPID" maxlength="6" placeholder="OPID" aria-label="OPID" aria-describedby="basic-addon1">
+
+                        <button class="btn btn-success m-0 pt-0 pb-0" type="button" onclick="SearchOPID();">Search</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="row  justify-content-lg-center  justify-content-md-center  m-5 " id="DIV_DDL" style="display: none;">
+
+            <div class="col col-lg-5 col-md-5">
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend shadow-lg">
+                        <label class="input-group-text m-0 pt-0 pb-0 " for="DDL_PlanID">Plan ID</label>
+                        @Html.DropDownList("DDL_PlanID", new SelectList("", ""), new { @id = "DDL_PlanID", @class = "custom-select h-100 shadow-lg " })
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-lg-5 col-md-5">
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend shadow-lg">
+                        <label class="input-group-text m-0 pt-0 pb-0" for="DDL_License_Name">License Name</label>
+                        @Html.DropDownList("DDL_License_Name", new SelectList("", ""), new { @id = "DDL_License_Name", @class = "custom-select h-100 shadow-lg " })
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-lg-2 col-md-2">
+                @*<input type="submit" name="Preview" value="Preview" id="BTN_Submit" class="btn btn-primary btn-block" formaction="/PracticalExam/PracticalReport" formmethod="post"  />*@
+                @*<input type="submit" title="Delete" value="Submit" class="btn btn-primary btn-block" onclick="location.href = '@Url.Action("PracticalReport", "PracticalExam", new {opno = "007895"})'"/>*@
+                <input type="submit" value="Preview" class="btn btn-primary btn-block" />
+                @*<a class="btn btn-danger" asp-controller="PracticalExam" method="Post" asp-action="PracticalReport" asp-route-opno="007895" asp-route-licenseno="T2220-0001" asp-route-planid="CO1001">Preview PDF</a>*@
+                @*@Html.ActionLink("Preview", "PracticalReport", "PracticalExam", new { opno = "007895" }, new { @class = "btn btn-danger" })*@
+            </div>
+
+
+
+        </div>
+      
+    </form>
+
+        <hr />
+        @if (ViewBag.WebReport != null)
+        {
+        <div class="text-center">
+            <a class="btn btn-danger"   id="BTN_PDF" onclick="Download('@ViewBag.StaffID','@ViewBag.License_Name','@ViewBag.PlanID');" >Download PDF</a>
+           
+            @await ViewBag.WebReport.Render()
+        </div>
+           
+        }
+
+
+</div>
+
+    @section scripts{
+
+
+     
+
+        <script>
+
+            var Staffcode;
+            var PlanID;
+            var License_Name;
+
+
+            $(document).ready(function () {
+
+                $("#DDL_License_Name").prop('disabled', true);
+
+            });
+
+
+            function Download(Staffcode, License_Name, PlanID) {
+
+
+
+                location.href = '@Url.Action("Pdf", "PracticalExam")?OPID=' + Staffcode + '&DDL_License_Name=' + License_Name + '&DDL_PlanID=' + PlanID + '';
+
+
+                //$.ajax({
+                //    type: 'POST',
+                //    url: '../PracticalExam/Pdf',
+                //    dataType: 'json',
+                //    data: { OPID: Staffcode, DDL_License_Name: License_Name, DDL_PlanID: PlanID},
+                //    success: function (response) {
+                //        //if (response.length !== 0) {
+                //        //    $.each(response, function (i, div) {
+                //        //        $("#DDL_PlanID").append('<option value="' + div.value + '">' + div.text + '</option>');
+                //        //    });
+
+                //        //    $('#DIV_DDL').show();
+                //        //}
+                //        //else {
+                //        //    $('#DIV_DDL').hide();
+                //        //    Swal.fire({
+                //        //        icon: 'error',
+                //        //        title: 'Oops...',
+                //        //        text: ("OPID Not Found"),
+                //        //    });
+                //        //}
+                //    },
+                //    error: function (ex) {
+                //        Swal.fire({
+                //            icon: 'error',
+                //            title: 'Oops...',
+                //            text: ('Failed to retrieve states.' + ex)
+                //        });
+                //        $('#DIV_DDL').hide();
+                //    }
+                //});
+
+            }
+
+
+
+            function SearchOPID() {
+
+                Staffcode = $('#TB_OPID').val();
+
+                if (Staffcode !== "") {
+
+                    $("#DDL_PlanID option").remove();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '../PracticalExam/GetPlanIDReport',
+                        dataType: 'json',
+                        data: { Staffcode: Staffcode },
+                        success: function (response) {
+                            if (response.length !== 0) {
+
+                                $.each(response, function (i, div) {
+                                    $("#DDL_PlanID").append('<option value="' + div.value + '">' + div.text + '</option>');
+                                });
+
+                                $('#DIV_DDL').show();
+                            }
+                            else {
+                                $('#DIV_DDL').hide();
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: ("OPID Not Found"),
+                                });
+
+
+                            }
+                        },
+                        error: function (ex) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: ('Failed to retrieve states.' + ex)
+                            });
+                            $('#DIV_DDL').hide();
+                        }
+                    });
+
+
+                } else {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: ("plass Input OPID")
+                    });
+
+
+                }
+
+
+
+            }
+
+            $("#DDL_PlanID").change(function () {
+
+                PlanID = this.value;
+                $("#DDL_License_Name option").remove();
+
+
+
+                if (PlanID !== "0") {
+                    $("#DDL_License_Name").prop('disabled', false);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '../PracticalExam/GetLicense_NameReport',
+                        dataType: 'json',
+                        data: { Staffcode: Staffcode, PlanID: PlanID },
+                        success: function (response) {
+
+                            if (response.length !== 0) {
+
+                                $.each(response, function (i, div) {
+                                    $("#DDL_License_Name").append('<option value="' + div.value + '">' + div.text + '</option>');
+                                });
+
+                                // $('#DIV_DDL').show();
+                            }
+                            else {
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: ("OPID Not Found")
+                                });
+
+                                //  $('#DIV_DDL').hide();
+                            }
+                        },
+                        error: function (ex) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: ('Failed to retrieve states.' + ex)
+                            });
+                            //    $('#DIV_DDL').hide();
+                        }
+                    });
+
+                }
+                else {
+
+
+                    $("#DDL_License_Name").prop('disabled', true);
+                    $("#DDL_License_Name option").remove();
+
+                }
+
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+        </script>
+
+
+
+
+    }
+
+
+

@@ -1,0 +1,471 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+@*<h1>Active Users</h1>
+    <h2><span id="users"></span></h2>*@
+<h5 class="mb-3">
+    <strong>Dashboard</strong>
+</h5>
+
+<!--Dashboard widget-->
+<div class="mt-1 mb-3 button-container">
+    <div class="row pl-0">
+        <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+            <div class="bg-light-blue border shadow">
+                <div class="media p-4">
+                    <div class="align-self-center mr-3 rounded-circle notify-icon bg-theme">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="media-body pl-2">
+                        <h3 class="mt-0 mb-0">
+                            <strong class="text-white" id="users_all">0</strong>
+                        </h3>
+                        <p>
+                            <small class=" bc-description text-white">Total User Online</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pl-0">
+        <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+            <div class="  border shadow" style="background-color:#54C3D5;">
+                <div class="media p-4">
+                    <div class="align-self-center mr-3 rounded-circle notify-icon bg-white">
+                        <i class="fas fa-users text-theme"></i>
+                    </div>
+                    <div class="media-body pl-2">
+                        <h3 class="mt-0 mb-0">
+                            <strong class="text-white" id="Count_TRDI">0</strong>
+                        </h3>
+                        <p>
+                            <small class="  bc-description text-white">TRDI </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+            <div class="  border shadow" style="background-color:#88E47F;">
+                <div class="media p-4">
+                    <div class="align-self-center mr-3 rounded-circle notify-icon bg-white">
+                        <i class="fas fa-users text-theme"></i>
+                    </div>
+                    <div class="media-body pl-2">
+                        <h3 class="mt-0 mb-0">
+                            <strong class="text-white" id="Count_MCR">0</strong>
+                        </h3>
+                        <p>
+                            <small class="bc-description text-white">MCR</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+            <div class="  border shadow" style="background-color:#8E7FE4;">
+                <div class="media p-4">
+                    <div class="align-self-center mr-3 rounded-circle notify-icon bg-white">
+                        <i class="fas fa-users text-theme"></i>
+                    </div>
+                    <div class="media-body pl-2">
+                        <h3 class="mt-0 mb-0">
+                            <strong class="text-white" id="Count_OPM">0</strong>
+                        </h3>
+                        <p>
+                            <small class="bc-description text-white">OPM</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+            <div class="  border shadow" style="background-color:#EF5F5F;">
+                <div class="media p-4">
+                    <div class="align-self-center mr-3 rounded-circle notify-icon bg-white">
+                        <i class="fas fa-users text-theme"></i>
+                    </div>
+                    <div class="media-body pl-2">
+                        <h3 class="mt-0 mb-0">
+                            <strong class="text-white" id="Count_LAPIS">0</strong>
+                        </h3>
+                        <p>
+                            <small class="bc-description text-white">LAPIS</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-md-4 col-sm-6 col-12 mb-3">
+            <div class="  border shadow" style="background-color:#5FEFAA;">
+                <div class="media p-4">
+                    <div class="align-self-center mr-3 rounded-circle notify-icon bg-white">
+                        <i class="fas fa-users text-theme"></i>
+                    </div>
+                    <div class="media-body pl-2">
+                        <h3 class="mt-0 mb-0">
+                            <strong class="text-white" id="Count_LSI">0</strong>
+                        </h3>
+                        <p>
+                            <small class="bc-description text-white">LSI</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/Dashboard widget-->
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col-xl-3 ">
+            <div class="card   button-container   shadow-sm  ">
+                <div class="card-header ">
+                    <h6 class="mb-2">License in RIST</h6>
+                </div>
+                <div class=" card-body">
+                    <div class="chart-container">
+                        <canvas id="doughnutChart_License" height="150px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl ">
+            <div class="card   button-container   shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">Doughnut chart</h6>
+                </div>
+                <div class=" card-body ">
+                    <table class="table table-sm text-sm-center">
+                        <thead class="bg-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>xmdo</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>xfat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td>xtwitter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 ">
+            <div class="card   button-container   shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">Doughnut chart</h6>
+                </div>
+                <div class=" card-body">
+                    <canvas id="pieChart" height="150px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-xl-6  ">
+            <div class="card   button-container panel-head-primary  shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">DIV #RISKS >= Threshold: Top 5 Vulnerabilities</h6>
+                </div>
+                <div class=" card-body">
+                    <canvas id="barChart1" height="100px"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6   ">
+            <div class="card   button-container panel-head-primary  shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">DIV #RISKS >= Threshold:  Top 5 Entities</h6>
+                </div>
+                <div class=" card-body">
+                    <canvas id="barChart2" height="100px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mt-3">
+        <div class="col-xl-6  ">
+            <div class="card   button-container panel-head-primary  shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">SEC #RISKS >= Threshold: Top 5 Vulnerabilities</h6>
+                </div>
+                <div class=" card-body">
+                    <canvas id="barChart3" height="100px"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6   ">
+            <div class="card   button-container panel-head-primary  shadow-sm  ">
+                <div class="card-header">
+                    <h6 class="mb-2">SEC #RISKS >= Threshold:  Top 5 Entities</h6>
+                </div>
+                <div class=" card-body">
+                    <canvas id="barChart4" height="100px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    @section scripts{
+        <!--Reference the autogenerated SignalR hub script. -->
+
+        <script>
+
+            /*-----------------------chart--------------------------------------*/
+            function Get_dataChart() {
+
+                var labels_charts = [];
+                var data_charts = [];
+                $.ajax({
+                    type: 'POST',
+                    url: 'getDataLicense',
+                    dataType: 'json',
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            labels_charts.push(data[i].license_Type);
+                            data_charts.push(data[i].num_License);
+                        }
+                        console.log(data_charts);
+                        console.log(labels_charts);
+                       
+                        var doughnutPieData = {
+                            datasets: [{
+                                data: data_charts,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.5)',
+                                    'rgba(54, 162, 235, 0.5)',
+                                    'rgba(255, 206, 86, 0.5)',
+                                    'rgba(75, 192, 192, 0.5)',
+                                    'rgba(153, 102, 255, 0.5)',
+                                    'rgba(255, 159, 64, 0.5)'
+                                ],
+                                borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                
+                            }],
+                            labels: labels_charts
+                            // These labels appear in the legend and in the tooltips when hovering different arcs
+
+                        };
+                        var doughnutPieOptions = {
+                            responsive: true,
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            }
+                        };
+
+                        if ($("#doughnutChart_License").length) {
+                            var doughnutChartCanvas = $("#doughnutChart_License").get(0).getContext("2d");
+                            var doughnutChart = new Chart(doughnutChartCanvas, {
+                                type: 'doughnut',
+                                data: doughnutPieData,
+                                options: doughnutPieOptions,
+                                responsive: true,
+                            });
+                        }
+                        
+                    }
+                });
+              
+
+            }
+            /*-----------------------chart--------------------------------------*/
+
+
+
+
+
+
+
+            function warning() {
+
+                //$.ajax({
+                //    type: 'POST',
+                //    url: "../Account/DeleteOperatorOnline",
+                //    success: function (Data) {
+
+                //    }
+                //});
+
+                return ""; //U can write any custom message here.
+            }
+
+             window.onbeforeunload = warning;
+            console.log(performance.navigation.type);
+            console.log(PerformanceNavigation);
+            if (performance.navigation.type == PerformanceNavigation.TYPE_RELOAD) {
+              
+                $.ajax({
+                    type: 'POST',
+                    url: "../Account/InsertOperatorOnline",
+                    success: function (Data) {
+                    }
+                });
+            } else {
+              
+                $.ajax({
+                    type: 'POST',
+                    url: "../Account/InsertOperatorOnline",
+                    success: function (Data) {
+                    }
+                });
+            }
+
+
+
+            var jqxhr;
+            var count_operator_all;
+            //if (performance.navigation.type == PerformanceNavigation.TYPE_RELOAD) {
+            //    console.log("Reload");
+            //}
+
+            //if (performance.navigation.type == PerformanceNavigation.TYPE_BACK_FORWARD) {
+            //    //Back Button
+            //    console.log("Back");
+
+            //}
+            $(document).ready(function () {
+                call_get_Operator();
+                Get_dataChart();
+            });
+
+            function call_get_Operator() {
+
+
+                jqxhr = $.ajax({
+                    type: 'POST',
+                    url: "../api/GetOperator",
+                    success: function (Data) {
+                        var Count_OpTRDI = [];
+                        var Count_OpMCR = [];
+                        var Count_OpOPM = [];
+                        var Count_OpLAPIS = [];
+                        var Count_OpLSI = [];
+
+
+                        if (Data.length != count_operator_all) {
+                            Count_OpTRDI.length = 0;
+                            Count_OpMCR.length = 0;
+                            Count_OpOPM.length = 0;
+                            Count_OpLAPIS.length = 0;
+                            Count_OpLSI.length = 0;
+
+                            $("#users_all").html(Data.length);
+                            for (var i = 0; i < Data.length; i++) {
+
+                                if (Data[i].opDepartment.includes("TR")) {
+                                    Count_OpTRDI.push(1);
+
+                                }
+                                if (Data[i].opDepartment.includes("MCR")) {
+                                    Count_OpMCR.push(1);
+                                }
+
+                                if (Data[i].opDepartment.includes("OPM")) {
+                                    Count_OpOPM.push(1);
+                                }
+
+                                if (Data[i].opDepartment.includes("LAPIS")) {
+                                    Count_OpLAPIS.push(1);
+                                }
+
+                                if (Data[i].opDepartment.includes("LSI")) {
+                                    Count_OpLSI.push(1);
+                                }
+
+                                $("#Count_TRDI").html(Count_OpTRDI.length);
+                                $("#Count_MCR").html(Count_OpMCR.length);
+                                $("#Count_OPM").html(Count_OpOPM.length);
+                                $("#Count_LAPIS").html(Count_OpLAPIS.length);
+                                $("#Count_LSI").html(Count_OpLSI.length);
+
+                            }
+                            count_operator_all = Data.length;
+                        }
+
+
+
+
+                    }
+                })
+                jqxhr.always(function () {
+                    call_get_Operator();
+                });
+
+            }
+        </script>
+        <script src="~/lib/microsoft-signalr/signalr.js"></script>
+        <script type="text/javascript">
+
+            document.addEventListener('DOMContentLoaded',
+                function () {
+                    function bindConnectionMessage(connection) {
+                        var messageCallback = function (message) {
+                            console.log('message' + message);
+                            if (!message) return;
+                            var userCountSpan = document.getElementById('users');
+                            userCountSpan.innerText = message;
+                        };
+                        connection.on("updateCount", messageCallback);
+                        connection.onclose(onConnectionError);
+                    }
+
+                    function onConnected(connection) {
+                        console.log('connection started');
+                    }
+
+                    function onConnectionError(error) {
+                        if (error && error.message) {
+                            //alert(error.message);
+                            //console.error(error.message);
+                        }
+                    }
+
+                    var connection = new window.signalR.HubConnectionBuilder().configureLogging(window.signalR.LogLevel.Debug).withUrl('/DemoSkillTest/CounterHub').build();
+
+
+                    bindConnectionMessage(connection);
+                    connection.start()
+                        .then(function () {
+                            onConnected(connection);
+                        })
+                        .catch(function (error) {
+                            //alert(error.message);
+                            //console.error(error.message);
+                        });
+                });
+          
+        </script>
+    }
