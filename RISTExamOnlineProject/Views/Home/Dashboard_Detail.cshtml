@@ -79,10 +79,10 @@
 
     </div>
     <div class="col-md-1">
-        <button type="button" class="btn btn-info" style="margin-top: 35%; height: 50%; width: 100%;">Search</button>
+        <button type="button" class="btn btn-info" style="margin-top: 35%; height: 50%; width: 100%;" onclick="Search_All()">Search</button>
     </div>
     <div class="col-md-1">
-        <button type="button" class="btn btn-info"style="margin-top: 35%; height: 50%; width: 100%;">Reset</button>
+        <button type="button" class="btn btn-info"style="margin-top: 35%; height: 50%; width: 100%;" onclick="Reset_All()">Reset</button>
     </div>
 </div>
 
@@ -92,11 +92,11 @@
         <div class="col-xl-6 ">
             <div class="card   button-container   shadow-sm  ">
                 <div class="card-header ">
-                    <h6 class="mb-2">Doughnut chart</h6>
+                    <h6 class="mb-2">All staff in license</h6>
                 </div>
                 <div class=" card-body">
                     <div class="chart-container">
-                        <canvas id="doughnutChart" height="150px"></canvas>
+                        <canvas id="CountStaffLicense" height="150px"></canvas>
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
         <div class="col-xl-6  ">
             <div class="card   button-container panel-head-primary  shadow-sm  ">
                 <div class="card-header">
-                    <h6 class="mb-2">Doughnut chart</h6>
+                    <h6 class="mb-2">All staff in division license</h6>
                 </div>
                 <div class=" card-body">
                     <canvas id="barChart1" height="100px"></canvas>
@@ -209,7 +209,9 @@
 
         <script>
              $(document).ready(function () {
-                            get_Ddl_Division();
+                 get_Ddl_Division();
+                 CountOpeLicense();
+                 CountOpeLicenseDiv();
 
                         $('#TableExam').DataTable({
                             ajax: {
@@ -248,20 +250,20 @@
                         function Division_Changed() {
 
                                     var type_changed = "Division";
-                        var Division_val = $("#Ddl_Divisions").val();
-                        $.ajax({
-                            type: 'POST',
-                        data: {type: type_changed, value_key: Division_val },
-                        url: 'getDataDropdownlist',
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log(data);
-                        var content = '<option value="0"> -- Select Departments -- </option>';
-                        for (var i = 0; i < data.length; i++) {
-                            content += '<option value="' + data[i].row_num + '">' + data[i].department + ' </option>';
-                                            }
+                                    var Division_val = $("#Ddl_Divisions").val();
+                                    $.ajax({
+                                        type: 'POST',
+                                    data: {type: type_changed, value_key: Division_val },
+                                    url: 'getDataDropdownlist',
+                                    dataType: 'json',
+                                    success: function (data) {
+                            
+                                    var content = '<option value="0"> -- Select Departments -- </option>';
+                                    for (var i = 0; i < data.length; i++) {
+                                        content += '<option value="' + data[i].row_num + '">' + data[i].department + ' </option>';
+                                                        }
 
-                        $("#Ddl_Departments").html(content);
+                                    $("#Ddl_Departments").html(content);
                                         }
 
                                     })
@@ -270,20 +272,20 @@
 
                         function Departments_Changed() {
                                     var type_changed = "Department";
-                        var Department_val = $("#Ddl_Departments").val();
-                        $.ajax({
-                            type: 'POST',
-                        data: {type: type_changed, value_key: Department_val },
-                        url: 'getDataDropdownlist',
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log(data);
-                        var content = '<option value="0"> -- Select Departments -- </option>';
-                        for (var i = 0; i < data.length; i++) {
-                            content += '<option value="' + data[i].sectionCodeID + '">' + data[i].section + ' </option>';
-                                            }
+                                    var Department_val = $("#Ddl_Departments").val();
+                                    $.ajax({
+                                        type: 'POST',
+                                    data: {type: type_changed, value_key: Department_val },
+                                    url: 'getDataDropdownlist',
+                                    dataType: 'json',
+                                    success: function (data) {
+                            
+                                    var content = '<option value="0"> -- Select Departments -- </option>';
+                                    for (var i = 0; i < data.length; i++) {
+                                        content += '<option value="' + data[i].sectionCodeID + '">' + data[i].section + ' </option>';
+                                                        }
 
-                        $("#Ddl_Section").html(content);
+                                    $("#Ddl_Section").html(content);
                                         }
 
                                     });
@@ -291,26 +293,26 @@
                                 }
 
                         function Section_Changed() {
-                                    var type_changed = "Section";
-                        var Section_val = $("#Ddl_Section").val();
-                        var split_license = [];
-                        $.ajax({
-                            type: 'POST',
-                        data: {type: type_changed, value_key: Section_val },
-                        url: 'getDataDropdownlist',
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log(data);
-                        var content = '<option value="0"> -- Select License -- </option>';
-                        for (var i = 0; i < data.length; i++) {
-                            split_license = data[i].license.split(";");
-                                                /* content += '<option value="' + data[i].License + '">' + data[i].License + ' </option>';*/
-                                            }
-                        for (var l = 0; l < split_license.length - 1; l++) {
-                            content += '<option value="' + split_license[l] + '">' + split_license[l] + ' </option>';
-                                            }
-                        console.log(split_license);
-                        $("#Ddl_License").html(content);
+                                   var type_changed = "Section";
+                                    var Section_val = $("#Ddl_Section").val();
+                                    var split_license = [];
+                                    $.ajax({
+                                        type: 'POST',
+                                    data: {type: type_changed, value_key: Section_val },
+                                    url: 'getDataDropdownlist',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        
+                                    var content = '<option value="0"> -- Select License -- </option>';
+                                    for (var i = 0; i < data.length; i++) {
+                                        split_license = data[i].license.split(";");
+                                                            /* content += '<option value="' + data[i].License + '">' + data[i].License + ' </option>';*/
+                                                        }
+                                    for (var l = 0; l < split_license.length - 1; l++) {
+                                        content += '<option value="' + split_license[l] + '">' + split_license[l] + ' </option>';
+                                                        }
+                                    console.log(split_license);
+                                    $("#Ddl_License").html(content);
                                         }
 
                                     });
@@ -320,23 +322,24 @@
                                     var type_changed = "License";
                         var License_val = $("#License").val();
                         $.ajax({
-                            type: 'POST',
-                        data: {type: type_changed, value_key: License_val },
-                        url: 'getDataDropdownlist',
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log(data);
-                        var content = '<option value="0"> -- Select ItemCategName -- </option>';
-                        for (var i = 0; i < data.length; i++) {
-                            content += '<option value="' + data[i].itemCateg + '">' + data[i].itemCategName + ' </option>';
-                                            }
+                                 type: 'POST',
+                                data: {type: type_changed, value_key: License_val },
+                                url: 'getDataDropdownlist',
+                                dataType: 'json',
+                                success: function (data) {
+                                            
+                                    var content = '<option value="0"> -- Select ItemCategName -- </option>';
+                                    for (var i = 0; i < data.length; i++)
+                                    {
+                                            content += '<option value="' + data[i].itemCateg + '">' + data[i].itemCategName + ' </option>';
+                                    }
 
-                        $("#Ddl_ItemCategName").html(content);
-                                        }
-
-                                    });
-
+                                    $("#Ddl_ItemCateg").html(content);
                                 }
+
+                             });
+
+                          }
 
                         function get_Ddl_Division() {
                             $.ajax({
@@ -344,7 +347,7 @@
                                 url: 'getDdlDivision',
                                 dataType: 'json',
                                 success: function (data) {
-                                    console.log(data);
+                                    
                                     var content = '<option value="0"> -- Select Divisions -- </option>';
                                     for (var i = 0; i < data.length; i++) {
                                         content += '<option value="' + data[i].row_num + '">' + data[i].divisionName + ' </option>';
@@ -355,6 +358,201 @@
 
                             })
                         }
+            function ItemCateg_Changed() {
+                var type_changed = "ItemCategName";
+                var ItemCateg_val = $("#Ddl_ItemCateg").val();
+                $.ajax({
+                    type: 'POST',
+                    data: { type: type_changed, value_key: ItemCateg_val },
+                    url: 'getDataDropdownlist',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        var content = '<option value="0"> -- Select ItemCategName -- </option>';
+                        for (var i = 0; i < data.length; i++) {
+                            content += '<option value="' + data[i].itemCateg + '">' + data[i].itemCategName + ' </option>';
+                        }
+
+                        $("#Ddl_ItemCategName").html(content);
+                    }
+
+                })
+
+                //-----------------------ITEM CODE----------------------------------
+                var type_changed2 = "ItemCode";
+                $.ajax({
+                    type: 'POST',
+                    data: { type: type_changed2, value_key: ItemCateg_val },
+                    url: 'getDataDropdownlist',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        var content = '';
+                        for (var i = 0; i < data.length; i++) {
+                            content += '<option value="' + data[i].itemCode + '">' + data[i].itemCode + ' </option>';
+                        }
+
+                        $("#Ddl_ItemCode").html(content);
+                    }
+
+                })
+            }
+
+            function ItemCode_Changed() {
+                var type_changed = "ItemCodeName";
+                var itemCodeName_val = $("#Ddl_ItemCode").val();
+                $.ajax({
+                    type: 'POST',
+                    data: { type: type_changed, value_key: itemCodeName_val },
+                    url: 'getDataDropdownlist',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        var content = '';
+                      /*  for (var i = 0; i < data.length; i++) {*/
+                            content += '<option value="' + data[0].itemCode + '">' + data[0].itemName + ' </option>';
+                        /*}*/
+
+                        $("#Ddl_itemName").html(content);
+                    }
+
+                })
+            }
+
+            function Reset_All() {
+                var option_Ddl_Departments = '<option value="0"> -- Select Departments -- </option>';
+                var option_Ddl_Section = '<option value="0"> -- Select Section -- </option>';
+                var option_Ddl_License = '<option value="0"> -- Select License -- </option>';
+                /* var option_Ddl_ItemCateg = '<option value="0"> -- Select ItemCateg -- </option>';*/
+                var option_Ddl_ItemCategName = '<option value="0"> -- Select ItemCategName -- </option>';
+                var option_Ddl_ItemCode = '<option value="0"> -- Select ItemCode -- </option>';
+                var option_Ddl_itemName = '<option value="0"> -- Select itemName -- </option>';
+                $('#Ddl_Divisions').val(0);
+
+                $('#Ddl_Section').html(option_Ddl_Section);
+                $('#Ddl_License').html(option_Ddl_License);
+                $('#Ddl_ItemCode').html(option_Ddl_ItemCode);
+                $('#Ddl_itemName').html(option_Ddl_itemName);
+                $('#Ddl_ItemCategName').html(option_Ddl_ItemCategName);
+                $('#Ddl_ItemCateg').val(0);
+                $('#Ddl_Departments').html(option_Ddl_Departments);
+            }
+            function Search_All() {
+
+                var DivisionValue = $('#Ddl_Divisions').val();
+                var sectionValue = $('#Ddl_Section').val();
+                var LicenseValue = $('#Ddl_License').val();
+                var ItemCodeValue = $('#Ddl_ItemCode').val();
+                var itemNameValue = $('#Ddl_itemName').val();
+                var ItemCategNameValue = $('#Ddl_ItemCategName').val();
+                var ItemCategValue = $('#Ddl_ItemCateg').val();
+                var DepartmentsValue = $('#Ddl_Departments').val();
+                Swal.fire({
+                    icon: 'warning',
+                    title: "อยู่ในระหว่างพัฒนา",
+                    type: 'waring',
+                    timer: 1700,
+                }).then(function () {
+                    return false;
+                });
+                //$.ajax({
+                //    type: 'POST',
+                //    data: {
+                //        DivisionValue: DivisionValue,
+                //        sectionValue: sectionValue,
+                //        LicenseValue: LicenseValue,
+                //        ItemCodeValue: ItemCodeValue,
+                //        itemNameValue: itemNameValue,
+                //        ItemCategNameValue: ItemCategNameValue,
+                //        ItemCategValue: ItemCategValue,
+                //        DepartmentsValue: DepartmentsValue
+                //    },
+                //    url: 'Search_DashboardDetail',
+                //    dataType: 'json',
+                //    success: function (data) {
+                //        console.log(data);
+                //    }
+
+                //})
+            }
+
+
+            function CountOpeLicense() {
+                var label_s = [];
+                var data_s = [];
+                $.ajax({
+                    type: 'POST',
+                    url: 'Count_Operator_License',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        for (var i = 0; i < data.length; i++) {
+                            data_s.push(data[i].countStaff);
+                            label_s.push(data[i].license_Type)
+                        }
+                        var doughnutPieOptions = {
+                            responsive: true,
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            }
+                        };
+                        var doughnutPieData = {
+                            datasets: [{
+                                data: data_s,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.5)',
+                                    'rgba(54, 162, 235, 0.5)',
+                                    'rgba(255, 206, 86, 0.5)',
+                                    'rgba(75, 192, 192, 0.5)',
+                                    'rgba(153, 102, 255, 0.5)',
+                                    'rgba(255, 159, 64, 0.5)'
+                                ],
+                                borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                            }],
+
+                            // These labels appear in the legend and in the tooltips when hovering different arcs
+                            labels: label_s
+                           
+                        };
+                        if ($("#CountStaffLicense").length) {
+                            var doughnutChartCanvas = $("#CountStaffLicense").get(0).getContext("2d");
+                            var doughnutChart = new Chart(doughnutChartCanvas, {
+                                type: 'doughnut',
+                                data: doughnutPieData,
+                                options: doughnutPieOptions,
+                                responsive: true,
+                            });
+                        }
+                        //var content = '';
+                        //for (var i = 0; i < data.length; i++) {
+                        //    content += '<option value="' + data[i].itemCode + '">' + data[i].itemName + ' </option>';
+                        //}
+
+                        //$("#Ddl_itemName").html(content);
+                    }
+
+                })
+            }
+
+            function CountOpeLicenseDiv() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'Count_Operator_License',
+                    dataType: 'json',
+                    success: function (data) {
+
+                    }
+
+                });
+            }
         </script>
         <script src="~/lib/microsoft-signalr/signalr.js"></script>
         <script type="text/javascript">
@@ -380,7 +578,9 @@
                 //alert(error.message);
                 //console.error(error.message);
             }
-                            }
+            }
+
+       
 
             var connection = new window.signalR.HubConnectionBuilder().configureLogging(window.signalR.LogLevel.Debug).withUrl('/DemoSkillTest/CounterHub').build();
 
