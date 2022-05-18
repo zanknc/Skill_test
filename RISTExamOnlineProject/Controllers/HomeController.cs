@@ -102,6 +102,15 @@ namespace RISTExamOnlineProject.Controllers
                 string Strsql = "SELECT * FROM vewItemCategPlan where ItemCateg ='" + value_key + "'";
                 var ObjRun = new mgrSQLConnect(_configuration);
                 dt = ObjRun.GetDatatables(Strsql);
+                
+
+            }
+
+            if (type == "ItemCode")
+            {
+                string Strsql = "SELECT * FROM vewItemCategPlan where ItemCateg ='" + value_key + "'";
+                var ObjRun = new mgrSQLConnect(_configuration);
+                dt = ObjRun.GetDatatables(Strsql);
 
 
             }
