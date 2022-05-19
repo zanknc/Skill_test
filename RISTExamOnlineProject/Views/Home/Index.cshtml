@@ -176,109 +176,93 @@
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script>
 
+        var data_All = [];
         function get_ChartColumn() {
             var dataTrDi = [];
-            var dataMCR = [];
+            var test = {};
+            var dataEx = [];
             var dataOPM = [];
             var dataLAPIS = [];
             var dataLSI = [];
+
+            
+           
+            var dtPoints = [];
+            var dtLabel = [];
+            var obj = {};
+            var obj_New = {};
+            var Pointss = 0;
             $.ajax({
                 type: 'POST',
                 url: 'Get_SummaryLicenseDiv',
                 dataType: 'json',
                 success: function (data) {
                     console.log(data);
-                    for (var i = 0; i < data.value.tr.length; i++) {
-                        
-                        dataTrDi.push(data.value.tr[i].license_Type , "TRDI");
+
+                    for (var i = 0; i < data.value.licenGroup.length; i++) {
+                        var arrPoint = [];
+                        for (var l = 0; l < data.value.data[i].length; l++) {
+
+                            dtLabel.push(data.value.licenGroup[i]);
+                           
+                            if (String(parseInt(data.value.data[i][l][0][0])) == "NaN") {
+                                 Pointss = 0;
+                          
+                            } else {
+                                Pointss = parseInt(data.value.data[i][l][0][0]);
+                           
+                            }
+
+                            obj = { y: Pointss, x: data.value.data[i][l][1] }
+                            arrPoint.push(obj)
+                          
+                        }
+                        dtPoints.push(arrPoint);
+                       
+                        obj_New = {
+                            type: "stackedColumn",
+                            showInLegend: true,
+                            color: "#ff9393",
+                            name: data.value.licenGroup[i],
+                            dataPoints: [arrPoint]
+                        }
+                        console.log(obj_New);
+                        data_All.push(obj_New);
                     }
+                   
+
+
+                    var chart = new CanvasJS.Chart("chartContainer", {
+                        animationEnabled: true,
+                        title: {
+                            text: "Summary License By Divisions",
+                            fontFamily: "arial black",
+                            fontColor: "#695A42"
+                        },
+                        axisX: {
+                            /*interval: 30,*/
+                            intervalType: "month"
+                        },
+                        axisY: {
+                            valueFormatString: "$#0bn",
+                            gridColor: "rgba(255, 99, 132, 0.2)",
+                            tickColor: "rgba(255, 99, 132, 0.2)"
+                        },
+                        //toolTip: {
+                        //    shared: true,
+                        //    content: toolTipContent
+                        //},
+                        data: data_All
+                    });
+                    chart.render();
+
+                    console.log(data_All);
+
 
                 }
             });
-            console.log(dataTrDi);
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                title: {
-                    text: "Summary License By Divisions",
-                    fontFamily: "arial black",
-                    fontColor: "#695A42"
-                },
-                axisX: {
-                    interval: 1,
-                    intervalType: "year"
-                },
-                axisY: {
-                    valueFormatString: "$#0bn",
-                    gridColor: "rgba(255, 99, 132, 0.2)",
-                    tickColor: "rgba(255, 99, 132, 0.2)"
-                },
-                toolTip: {
-                    shared: true,
-                    content: toolTipContent
-                },
-                data: [{
-                    type: "stackedColumn",
-                    showInLegend: true,
-                    color: "#ff9393",
-                    name: "Bg",
-                    dataPoints: dataTrDi
-                    //    [
-                    //    { y: 6.75, x: new Date(2010, 0) },
-                    //    { y: 8.57, x: new Date(2011, 0) },
-                    //    { y: 10.64, x: new Date(2012, 0) },
-                    //    { y: 13.97, x: new Date(2013, 0) },
-                    //    { y: 15.42, x: new Date(2014, 0) },
-                    //    { y: 17.26, x: new Date(2015, 0) },
-                    //    { y: 20.26, x: new Date(2016, 0) }
-                    //]
-                },
-                {
-                    type: "stackedColumn",
-                    showInLegend: true,
-                    name: "Jr",
-                    color: "rgba(255, 159, 64, 0.2)",
-                    dataPoints: [
-                        { y: 6.82, x: new Date(2010, 0) },
-                        { y: 9.02, x: new Date(2011, 0) },
-                        { y: 11.80, x: new Date(2012, 0) },
-                        { y: 14.11, x: new Date(2013, 0) },
-                        { y: 15.96, x: new Date(2014, 0) },
-                        { y: 17.73, x: new Date(2015, 0) },
-                        { y: 21.5, x: new Date(2016, 0) }
-                    ]
-                },
-                {
-                    type: "stackedColumn",
-                    showInLegend: true,
-                    name: "Sr",
-                    color: "rgba(75, 192, 192, 0.2)",
-                    dataPoints: [
-                        { y: 7.28, x: new Date(2010, 0) },
-                        { y: 9.72, x: new Date(2011, 0) },
-                        { y: 13.30, x: new Date(2012, 0) },
-                        { y: 14.9, x: new Date(2013, 0) },
-                        { y: 18.10, x: new Date(2014, 0) },
-                        { y: 18.68, x: new Date(2015, 0) },
-                        { y: 22.45, x: new Date(2016, 0) }
-                    ]
-                },
-                {
-                    type: "stackedColumn",
-                    showInLegend: true,
-                    name: "Chr",
-                    color: "rgba(153, 102, 255, 0.2)",
-                    dataPoints: [
-                        { y: 8.44, x: new Date(2010, 0) },
-                        { y: 10.58, x: new Date(2011, 0) },
-                        { y: 14.41, x: new Date(2012, 0) },
-                        { y: 16.86, x: new Date(2013, 0) },
-                        { y: 10.64, x: new Date(2014, 0) },
-                        { y: 21.32, x: new Date(2015, 0) },
-                        { y: 26.06, x: new Date(2016, 0) }
-                    ]
-                }]
-            });
-            chart.render();
+          
+        }
 
             function toolTipContent(e) {
                 var str = "";
@@ -295,7 +279,7 @@
                 return (str2.concat(str)).concat(str3);
             }
 
-        }
+       
    
 
         /*-----------------------chart--------------------------------------*/
@@ -374,41 +358,7 @@
 
 
 
-        function warning() {
-
-            //$.ajax({
-            //    type: 'POST',
-            //    url: "../Account/DeleteOperatorOnline",
-            //    success: function (Data) {
-
-            //    }
-            //});
-
-            return ""; //U can write any custom message here.
-        }
-
-        window.onbeforeunload = warning;
-        console.log(performance.navigation.type);
-        console.log(PerformanceNavigation);
-        if (performance.navigation.type == PerformanceNavigation.TYPE_RELOAD) {
-
-            $.ajax({
-                type: 'POST',
-                url: "../Account/InsertOperatorOnline",
-                success: function (Data) {
-                }
-            });
-        } else {
-
-            $.ajax({
-                type: 'POST',
-                url: "../Account/InsertOperatorOnline",
-                success: function (Data) {
-                }
-            });
-        }
-
-
+       
 
         var jqxhr;
         var count_operator_all;
@@ -439,7 +389,7 @@
                     var Count_OpOPM = [];
                     var Count_OpLAPIS = [];
                     var Count_OpLSI = [];
-
+                 
 
                     if (Data.length != count_operator_all) {
                         Count_OpTRDI.length = 0;

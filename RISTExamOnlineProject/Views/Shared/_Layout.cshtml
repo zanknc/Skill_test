@@ -400,6 +400,53 @@
     @RenderSection("Scripts", required: false)
     @* @await RenderSectionAsync("Scripts", false)*@
     <script>
+
+        function warning() {
+
+            //$.ajax({
+            //    type: 'POST',
+            //    url: "../Account/DeleteOperatorOnline",
+            //    success: function (Data) {
+
+            //    }
+            //});
+            /*  doSomething()*/
+            //U can write any custom message here.
+        }
+
+        window.onbeforeunload = warning;
+        console.log(performance.navigation.type);
+        console.log(PerformanceNavigation);
+        if (performance.navigation.type == PerformanceNavigation.TYPE_RELOAD) {
+
+            $.ajax({
+                type: 'POST',
+                url: "../Account/InsertOperatorOnline",
+                success: function (Data) {
+                }
+            });
+        } else {
+
+            $.ajax({
+                type: 'POST',
+                url: "../Account/InsertOperatorOnline",
+                success: function (Data) {
+                }
+            });
+        }
+        window.onunload = function () {
+            var nothing = doSomething();
+        }
+
+        function doSomething() {
+            $.ajax({
+                type: 'POST',
+                url: "../Account/DeleteOperatorOnline",
+                success: function (Data) {
+                }
+            });
+        }
+
         $(document).ready(function () {
 
             Profile();

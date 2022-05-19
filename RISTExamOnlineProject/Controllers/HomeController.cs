@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using RISTExamOnlineProject.Models.db;
 using RISTExamOnlineProject.Models.TSQL;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -138,39 +140,56 @@ namespace RISTExamOnlineProject.Controllers
 
         public JsonResult Get_SummaryLicenseDiv()
         {
+            List<vewLicenseMaster> listItems = new List<vewLicenseMaster>();
+
             var ObjRun = new mgrSQLConnect(_configuration);
-            //------------------- TRDI--------------------------------------
-            DataTable dt_trdi = new DataTable();
-            string sql_Tr = "select count(License_Type) as TRDI , License_Type from vewSummaryLicenseDivision where division in " +
-                            "(select division from vewOperatorAll where division like '%TR/Di%' group by division) group by License_Type";
-            dt_trdi = ObjRun.GetDatatables(sql_Tr);
-
-            //------------------- MCR--------------------------------------
-            DataTable dt_MCR = new DataTable();
-            string sql_MCR = "select count(License_Type) as TRDI , License_Type from vewSummaryLicenseDivision where division in " +
-                            "(select division from vewOperatorAll where division like '%MCR%' group by division) group by License_Type";
-            dt_MCR = ObjRun.GetDatatables(sql_MCR);
-
-            //------------------- OPM--------------------------------------
-            DataTable dt_OPM = new DataTable();
-            string sql_OPM = "select count(License_Type) as TRDI , License_Type from vewSummaryLicenseDivision where division in " +
-                            "(select division from vewOperatorAll where division like '%OPM%' group by division) group by License_Type";
-            dt_OPM = ObjRun.GetDatatables(sql_OPM);
+            DataTable data_licenGroup = new DataTable();
+            string strLicense_group = "select License_Type from RTM.dbo.Plan_MasterDetails group by License_Type";
 
 
-            //------------------- LAPIS--------------------------------------
-            DataTable dt_LAPIS = new DataTable();
-            string sql_LAPIS = "select count(License_Type) as TRDI , License_Type from vewSummaryLicenseDivision where division in " +
-                            "(select division from vewOperatorAll where division like '%LAPIS%' group by division) group by License_Type";
-            dt_LAPIS = ObjRun.GetDatatables(sql_LAPIS);
 
-            //------------------- LSI--------------------------------------
-            DataTable dt_LSI = new DataTable();
-            string sql_LSI = "select count(License_Type) as TRDI , License_Type from vewSummaryLicenseDivision where division in " +
-                            "(select division from vewOperatorAll where division like '%LSI%' group by division) group by License_Type";
-            dt_LSI = ObjRun.GetDatatables(sql_LSI);
+            data_licenGroup = ObjRun.GetDatatables(strLicense_group);
+            string[] licenGroup = new string[data_licenGroup.Rows.Count];
+            int l = 0;
+            foreach (DataRow dr in data_licenGroup.Rows)
+            {
+                licenGroup[l++] = dr[0].ToString();
+            }
 
-            var jsonResult = Json(new { TR =  dt_trdi , MCR = dt_MCR, OPM = dt_OPM , LAPIS =  dt_LAPIS , LSI = dt_LSI });
+            //listItems.Add(tempList);
+            string[] Division_name = new string[] { "TR/di", "MCR", "OPM", "LAPIS", "LSI" };
+            string[] taaa = new string[] { };
+          
+            var data_list = new ArrayList();
+            var arry_license = new ArrayList();
+            List<vewLicenseMaster> Ls = new List<vewLicenseMaster>();
+            DataTable dt = new DataTable();
+            var arlist2 = new ArrayList();
+            for (int n = 0; n < licenGroup.Length; n++)
+            {
+                var data_list2 = new ArrayList();
+
+                for (int i = 0; i < Division_name.Length; i++)
+                {
+                    
+                    string sql_Tr = "select count(License_Type) as TRDI , License_Type from vewSummaryLicenseDivision where division in" +
+                                    " (select division from vewOperatorAll where division like '%" + Division_name[i] +"%' group by division) " +
+                                       "and License_Type = '" + licenGroup[n] +"' group by License_Type";
+                    dt = ObjRun.GetDatatables(sql_Tr);
+                    arry_license = new ArrayList() { dt.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToArray(), Division_name[i], licenGroup[n] };
+                    data_list2.Add(arry_license);
+                }
+               
+
+                data_list.Add(data_list2);
+
+            }
+
+            var jsonResult = Json(new { 
+                data = data_list,
+                licenGroup = licenGroup
+              
+            });
             return Json(jsonResult);
         }
         public JsonResult Count_Operator_License()
