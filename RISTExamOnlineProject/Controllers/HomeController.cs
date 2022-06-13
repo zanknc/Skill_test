@@ -206,6 +206,22 @@ namespace RISTExamOnlineProject.Controllers
 
             return Json("");
         }
+        public JsonResult Get_licenseReview()
+        {
+            var ObjRun = new mgrSQLConnect(_configuration);
+            DataTable dt_UsedLicense = new DataTable();
+            DataTable dt_NeverUseLicense = new DataTable();
+            string sql_UsedLicense = "SELECT * FROM vewCountLicenseAllTest";
+            string sql_NeverUseLicense = "SELECT * FROM vewCountLicenseNotTest";
+
+            dt_UsedLicense = ObjRun.GetDatatables(sql_UsedLicense);
+            dt_NeverUseLicense = ObjRun.GetDatatables(sql_NeverUseLicense);
+
+
+            var JsonResults = Json(new { License_Used = dt_UsedLicense , License_NotUsed = dt_NeverUseLicense });
+            return JsonResults;
+
+        }
 
         public JsonResult Get_Datatable_Exam()
         {

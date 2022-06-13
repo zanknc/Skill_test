@@ -281,15 +281,18 @@ function Approved_And_Reject(Job, valueStatus_Array, seq_Array, ValueCodeQuestio
 
 
 function SubmitData(Job) {
-    
+    console.log(Job);
     var text_class;
+    var word_Job;
     var text_Job;
     if (Job == 'Reject') {
         text_class = 'text-danger';
         text_Job = 'REJ'
+         word_Job = "reject";
     } else {
         text_class = 'text-success';
         text_Job = 'APP'
+         word_Job = "approve";
     }
 
 
@@ -299,9 +302,9 @@ function SubmitData(Job) {
 
 
     if (arrdata.length != 0) {
-
+        console.log(word_Job);
         Swal.fire({
-            title: "Are you sure you want to reject?",
+            title: "Are you sure you want to "+ Job + "?" ,
             html: "The total number of questions to be " + Job + " is <b class='text-danger'> " + arrdata.length + " </b> . Are you sure you want to <b class='" + text_class+"'>" + Job + " ?<b/>",
             icon: 'warning',
             showCancelButton: true,
