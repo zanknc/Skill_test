@@ -75,7 +75,7 @@ function Caltime(Index_) {
 
 
 function start(Index_) {
-
+	
 	Index = Index_;
 	reset(Index_)
 	startClock();
@@ -99,6 +99,7 @@ function pause(Index_) {
 	pauseClock();
 	$("#pause_" + Index).hide();
 	$("#resume_" + Index).show();
+	
 }
 function resume(Index_) {
 	Index = Index_;
@@ -118,7 +119,7 @@ function reset(Index_) {
 }
 
 function stop(Index_) {
-
+	
 	Index = Index_;
 	pauseClock();
 	//resetClock();
@@ -131,6 +132,8 @@ function stop(Index_) {
 
 
 	$("#reset_" + Index + ", #stop_" + Index + "").hide();
+
+
 }
 
 

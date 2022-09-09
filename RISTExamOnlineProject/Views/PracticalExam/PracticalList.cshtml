@@ -52,6 +52,12 @@
             </div>
         </div>
 
+        <div class="row justify-content-lg-center justify-content-md-center  mb-lg-5  mb-md-5">
+            <div class="col col-lg-5 col-md-7">
+                <button type="button" id="BTN_End_work" style="display:none;" class="btn-lg w-100 h-100 btn-danger shadow-lg" onclick="JobList('3');">จบการทำแบบทดสอบ</button>
+            </div>
+        </div>
+
 
 
 
@@ -72,29 +78,172 @@
             var OPID;
             var PlanID_List;
             var LicenseName_List;
-
-
+            var LicenseName;
+            var strSplit;
+          
             $(document).ready(function () {
-
+               
+                $("#BTN_End_work").hide();
                 OPID =   "@User.Identity.Name";
                 Staffcode =  getParams(document.URL);
                 GetPlanID(Staffcode);
+                strSplit = Staffcode.split("?");
+                LicenseName = strSplit[2];
+                check_PracticalResults(Staffcode, PlanID_List, LicenseName);
 
             });
 
+            window.addEventListener("pageshow", function (event) {
+                console.log(event);
+                var historyTraversal = event.persisted || (typeof window.performance != "undefined" && window.performance.navigation.type === 2);
+                if (historyTraversal) {
+                    // Handle page restore.
+                    //alert('refresh');
+                    check_PracticalResults(Staffcode, PlanID_List, LicenseName);
+                    window.location.reload();
+                }
+            });
 
-              function JobList(ItemID) {    
+            function check_PracticalResults(Staffcode, PlanID_List, LicenseName) {
+              
+                $.ajax({
+                    type: "POST",
+                    url: "check_PracticalResults",
+                    dataType: 'json',
+                    data: {
+                        Staffcode_: Staffcode,
+                        PlanID_List_: PlanID_List,
+                        LicenseName_List_: LicenseName
+                    },
+                    success: function (countRow) {
+                        console.log(countRow);
+                        if (countRow == 0) {
 
-          
+                            $("#BTN_End_work").css('display','none');
+                        } else {
+
+                            $("#BTN_End_work").css('display', 'block');
+                        }
+                    }
+
+                })
+            };
+
+              function JobList(ItemID) {
+                    if(ItemID == '3'){
+                         @*var MakerID = '@User.Identity.Name';
+                         var OPID = $("#strOPNo").val();*@
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Are you sure?',
+                            text: "Are you sure you want to End Practical ?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, Do it!'
+
+                        }).then(function (result) {
+                            if (result.value) {
+                                /* SaveData(OPID, MakerID);*/
+                                EndPartical(Staffcode, PlanID_List, LicenseName, OPID)
+                            }
+
+                        });
+
+                    }else{
+
                       location.href = '@Url.Action("ParcticalDispaly", "PracticalExam")?OPID=' + OPID + '&Staffcode=' + Staffcode + '&ItemID=' + ItemID + '&PlanID=' + PlanID_List + '&LicenseName=' + LicenseName_List + '';
-
+                    }
 
               }
 
+            function EndPartical(Staffcode, PlanID_List, LicenseName, OPID) {
 
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../PracticalExam/Savepractical',
+                    dataType: 'json',
+                    data: {
+                        Flag: "END", Staffcode: Staffcode, PlanID: PlanID_List, LicenseName: LicenseName, ItemID: 0, QuestionNo: 0,
+                        HearingJudge: 0, ActualTime_Seconds: 0, PracticalJudge: 0, ActualTimeJudge: 0, OPID: OPID
+                    },
+                    success: function (response) {
+                        if (response.success == true) {
+
+                            Judge = response.judge
+                            debugger
+
+                            if (Judge == 1) {
+                                CodeHTML = "<h2 class='font-weight-bold text-success'> ผ่าน </h2>";
+                             /*   $('#LINK_' + QuestionNo_).addClass("bg-success text-white badge-success");*/
+
+
+                            } else {
+                                CodeHTML = "<h2 class='font-weight-bold text-danger'> ไม่ผ่าน </h2>";
+                               /* $('#LINK_' + QuestionNo_).addClass("bg-danger text-white badge-danger");*/
+                            }
+
+                            //$("#BTN_Backward_" + QuestionNo_ + ", #BTN_Forward_" + QuestionNo_).hide();
+                            //$("#BTN_End_" + QuestionNo_).show();
+                            //$("#DIV_Forward_and_Back_" + QuestionNo_).hide();
+
+                            Swal.fire({
+                                position: 'top-mid',
+                                icon: 'success',
+                                title: response.responetext,
+                                html: "<h2 class='font-weight-bold'>  ผลการทดสอบ </h2>  " + CodeHTML,
+                                showConfirmButton: true,
+
+                            }).then(function (result) {
+
+                                debugger
+                                check_PracticalResults(Staffcode, PlanID_List, LicenseName);
+                                location.reload();
+                                /* $('#BTN_End_' + Index_).css('display', 'block');*/
+
+                                //var clickfun = $("#LINK_" + QuestionNo_).attr("onClick");
+                                //var funname = clickfun.substring(0, clickfun.indexOf("("));
+                                //$("#LINK_" + QuestionNo_).attr("onclick", funname + "('" + QuestionNo_ + "'," + "'" + Judge + "')");
+
+                                //DeleteHTML('button_wrap_' + QuestionNo_);
+
+                                //InputHTML('button_wrap_' + QuestionNo_, CodeHTML);
+                                //$('input[name=Hearing_' + QuestionNo_ + ']').prop('disabled', true);
+                                //$('input[name=Practical_' + QuestionNo_ + ']').prop('disabled', true);
+
+
+                                //document.getElementById('BTN_Save_' + QuestionNo_).remove();
+                                //document.getElementById('BTN_Backward_' + QuestionNo_).remove();
+                                //document.getElementById('BTN_Forward_' + QuestionNo_).remove();
+
+
+                                // Disabled(QuestionNo_);
+                                //   window.location = window.location;
+                                //  location.reload();                              
+                                //  MakeDisplayPractical();
+
+
+                            });
+
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: response.responetext,
+                            })
+                        }
+                    }
+
+                });
+            };
 
             function goBack() {
                 window.history.back();
+                
             };
 
         </script>

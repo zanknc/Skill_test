@@ -205,9 +205,9 @@
                             data: null,
                             render: function (data, type, row) {
                                 var staffcode = row.staffcode.trim();
-
-
-                                return "<button type='submit' class='btn btn-primary m-1' onclick=continuity('" + staffcode + "');>Continuous</button>";
+                                var planID = row.planID.trim();
+                               
+                                return "<button type='submit' class='btn btn-primary m-1' onclick=continuity('" + staffcode + "','" + planID + "','" + row.licenseName.trim() +"');>Continuous</button>";
 
                             }, class: "text-wrap text-center"
 
@@ -233,9 +233,9 @@
 
 
 
-            function continuity(Staffcode) {
-
-                 location.href = '@Url.Action("PracticalList", "PracticalExam")?Staffcode=' + Staffcode;
+            function continuity(Staffcode, planID, licenseName) {
+               
+                location.href = '@Url.Action("PracticalList", "PracticalExam")?Staffcode=' + Staffcode + '?' + planID + '?' + licenseName;
             }
 
 

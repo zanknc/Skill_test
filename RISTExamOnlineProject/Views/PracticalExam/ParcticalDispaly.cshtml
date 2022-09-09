@@ -47,16 +47,16 @@
 
 
         <script type="text/javascript">
-
+          
             var Staffcode;
             var OPID;
             var PlanID;
             var ItemID;
             var LicenseName;
             var QuestionNo;
-
+          
             $(document).ready(function () {
-       
+               
                OPID =   "@User.Identity.Name";
 
                 //$('ul.navbar-nav > li')
@@ -67,77 +67,77 @@
                 //    });
 
 
+             
 
                 MakeDisplayPractical();
-
-                onReady(function () {  
-                    var timeout, interval;
-
-                    [].forEach.call(document.querySelectorAll('.Time_Forward'), function (button) {
-                        button.addEventListener('mousedown', function () {
-
-                            var id = button.dataset.target;
-                            incrementValue(id, '1');
-
-                            timeout = setTimeout(function () {
-                                interval = setInterval(function () {
-                                    incrementValue(id, '1');
-                                }, 50);
-                            }, 300);
-                        });
-
-                        button.addEventListener('mouseup', clearTimers);
-                        button.addEventListener('mouseleave', clearTimers);
-
-                        function clearTimers() {
-                            clearTimeout(timeout);
-                            clearInterval(interval);
-                        }
-                    });
-
-                    [].forEach.call(document.querySelectorAll('.Time_Backward'), function (button) {
-                        button.addEventListener('mousedown', function () {
-
-                            var id = button.dataset.target;
-                            incrementValue(id, '0');
-
-                            timeout = setTimeout(function () {
-                                interval = setInterval(function () {
-                                    incrementValue(id, '0');
-                                }, 50);
-                            }, 300);
-                        });
-
-                        button.addEventListener('mouseup', clearTimers);
-                        button.addEventListener('mouseleave', clearTimers);
-
-                        function clearTimers() {
-                            clearTimeout(timeout);
-                            clearInterval(interval);
-                        }
-
-
-                    });
-
-                    function incrementValue(Index_, Job_) {
-
-                        if (Job_ == '1') {
-                            forward(Index_);
-
-                        } else {
-
-                            backward(Index_);
-                        }
-
-                    }
-            
-                });
-
-         
+               /* getEvent();*/
+               
             });
 
+            
+    
+            
+            //-------------
+            function TimeForward_mousedown(id) {
+                var timeout, interval;
+                incrementValue(id, '1');
+              
+                timeout = setTimeout(function () {
+                    interval = setInterval(function () {
+                     
+                        incrementValue(id, '1');
+                    }, 50);
+                }, 300);
 
-       
+              
+                var button = document.getElementById("BTN_Forward_" + id);
+                button.addEventListener('mouseup', clearTimers);
+                button.addEventListener('mouseleave', clearTimers);
+
+                function clearTimers() {
+                  
+                    clearTimeout(timeout);
+                    clearInterval(interval);
+                }
+            }
+
+            function TimeBackward_mousedown(id) {
+                var timeout, interval;
+                incrementValue(id, '0');
+
+                timeout = setTimeout(function () {
+                    interval = setInterval(function () {
+                        incrementValue(id, '0');
+                    }, 50);
+                }, 300);
+
+                var button = document.getElementById("BTN_Backward_" + id);
+                button.addEventListener('mouseup', clearTimers);
+                button.addEventListener('mouseleave', clearTimers);
+
+                function clearTimers() {
+                
+                    clearTimeout(timeout);
+                    clearInterval(interval);
+                }
+            }
+
+
+            function incrementValue(Index_, Job_) {
+
+                if (Job_ == '1') {
+                    forward(Index_);
+
+                } else {
+
+                    backward(Index_);
+                }
+
+            }
+
+
+
+            /* ---------------------Event old 03/09/2022*/
 
             function onReady(callback) {
                 var intervalId = window.setInterval(function () {
@@ -148,12 +148,84 @@
                 }, 1000);
             }
 
-    
 
-            //-------------
+            function getEvent() {
+                onReady(function () {
+                    var timeout, interval;
+                    console.log("onReady");
 
+
+                    [].forEach.call(document.getElementsByClassName('Time_Forward'), function (button) {
+                        console.log(list);
+                        console.log(button);
+                            console.log(button);
+                            button.addEventListener('mousedown', function () {
+
+                                var id = button.dataset.target;
+                                incrementValue(id, '1');
+                                console.log(id);
+
+                                timeout = setTimeout(function () {
+                                    interval = setInterval(function () {
+                                        incrementValue(id, '1');
+                                    }, 50);
+                                }, 300);
+
+                                console.log(timeout);
+                            });
+
+                            button.addEventListener('mouseup', clearTimers);
+                            button.addEventListener('mouseleave', clearTimers);
+
+                            function clearTimers() {
+
+                                clearTimeout(timeout);
+                                clearInterval(interval);
+                            }
+                        });
+
+                        [].forEach.call(document.querySelectorAll('.Time_Backward'), function (button) {
+                            button.addEventListener('mousedown', function () {
+
+                                var id = button.dataset.target;
+                                incrementValue(id, '0');
+
+                                timeout = setTimeout(function () {
+                                    interval = setInterval(function () {
+                                        incrementValue(id, '0');
+                                    }, 50);
+                                }, 300);
+                            });
+
+                            button.addEventListener('mouseup', clearTimers);
+                            button.addEventListener('mouseleave', clearTimers);
+
+                            function clearTimers() {
+                                clearTimeout(timeout);
+                                clearInterval(interval);
+                            }
+
+
+                        });
+
+                        function incrementValue(Index_, Job_) {
+
+                            if (Job_ == '1') {
+                                forward(Index_);
+
+                            } else {
+
+                                backward(Index_);
+                            }
+
+                        }
+
+                    });
+
+            }
 
         
+            
 
         </script>
 

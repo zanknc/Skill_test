@@ -174,7 +174,16 @@ namespace RISTExamOnlineProject.Models.TSQL
                 "'" + Answer + "', '" + Need + "', '" + ComputerName + "', '" + OPID + "', '" + ValueQuestion + "', '" + ValueAnswer + "','" + Rewrite.ToString() + "'  ";
 
             dt = ObjRun.GetDatatables(strSQL);
-            MS = dt.Rows[0][1].ToString();
+            if(dt.Rows.Count > 0)
+            {
+                MS = dt.Rows[0][1].ToString();
+            }
+            else
+            {
+                MS = "Job :" + Job + "| ValueCode:" + ValueCode + "| Seq:" + Seq.ToString() + "| Value_HTML:" + Value_HTML + "| Value_TEXT:" + Value_TEXT + "| Answer:" + Answer + "| Need:" + Need + "| ComputerName:" + ComputerName + "| OPID:" + OPID + "| ValueQuestion:" + ValueQuestion
+                    + "| ValueAnswer:" + ValueAnswer + "| Rewrite:" + Rewrite.ToString();
+            }
+           
 
             return MS;
 

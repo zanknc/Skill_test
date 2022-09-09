@@ -36,7 +36,7 @@
 
         <link href="~/lib/Custom/datepicker.css" rel="stylesheet" />
         <link href="~/lib/XpageList/PagedList.css" rel="stylesheet" />
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="~/lib/jquery-2.1.1.min.js"></script>
 
         @*<script type="text/javascript" src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>*@
         @*<script src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
@@ -253,7 +253,7 @@
                                         </a>
                                         <ul class="#" id="Shortcuts_Practical">
                                             @*--  <a href="@Url.Action("Index","PracticalExam")">*@
-
+                                            <li class="child "><a href="@Url.Action("PracticalManagement","PracticalExam")" class="ml-4"><i class="fa fa-angle-right mr-2"></i>Practical Management </a></li>
                                             <li class="child "><a href="@Url.Action("Index","PracticalExam")" class="ml-4"><i class="fa fa-angle-right mr-2"></i>Practical Online </a></li>
                                             <li class="child"><a href="@Url.Action("PracticalReport","PracticalExam")" class="ml-4"><i class="fa fa-angle-right mr-2"></i>Practical Report</a></li>
                                             <li class="child"><a href="@Url.Action("PracticalViewPlan","PracticalExam")" class="ml-4"><i class="fa fa-angle-right mr-2"></i>Practical Plan Detail</a></li>

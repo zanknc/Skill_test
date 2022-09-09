@@ -101,8 +101,8 @@ function SaveDetail(QuestionNo_) {
                                 $('#LINK_' + QuestionNo_).addClass("bg-danger text-white badge-danger");
                             }
 
-                            $("#BTN_Backward_" + QuestionNo_ + ", #BTN_Forward_" + QuestionNo_).hide();
-
+                            // $("#BTN_Backward_" + QuestionNo_ + ", #BTN_Forward_" + QuestionNo_).hide();
+                            // $("#BTN_End_" + QuestionNo_).show();
                             //$("#DIV_Forward_and_Back_" + QuestionNo_).hide();
 
                             Swal.fire({
@@ -116,7 +116,7 @@ function SaveDetail(QuestionNo_) {
 
                                 debugger
 
-                              
+                                // $('#BTN_End_' + Index_).css('display', 'block');
 
                                 var clickfun = $("#LINK_" + QuestionNo_).attr("onClick");
                                  var funname = clickfun.substring(0, clickfun.indexOf("("));     
@@ -253,8 +253,10 @@ function MakeDisplayPractical() {
         data: { OPID: OPID, Staffcode: Staffcode, PlanID: PlanID, ItemID: ItemID, LicenseName: LicenseName },
 
         success: function (response) {
+            /*console.log(response);*/
+            
             if (response.success == true) {
-                
+               
                 var HTML_Text = response.responetext
 
                 DeleteHTML('Main_Display');
@@ -268,6 +270,8 @@ function MakeDisplayPractical() {
 
 
             } else {
+                alert("false");
+                console.log(response);
                 DeleteHTML('Main_Display');
 
             }
@@ -302,6 +306,7 @@ function SwithNO(Index_,Judge_) {
         $("#reset_" + Index + ", #stop_" + Index + "").hide();
         $("#BTN_Backward_" + Index + ", #BTN_Forward_" + Index).hide();
         resetClock();
+       
     }
    
 }

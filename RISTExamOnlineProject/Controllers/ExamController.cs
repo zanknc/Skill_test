@@ -21,6 +21,7 @@ using RISTExamOnlineProject.Models.db;
 using RISTExamOnlineProject.Models.TSQL;
 
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace RISTExamOnlineProject.Controllers
 {
@@ -310,10 +311,20 @@ namespace RISTExamOnlineProject.Controllers
                 {
                     try
                     {
-                        //  string Root = @"wwwroot\lib\IMG_For_Exam"; // Path
-                        string Root = @"\\10.29.1.116\G$\TEC_Train_Dept\Program\TestSkill_Image";
+                        var pathUrl = HttpContext.Request.Path;
+
+                        var pathBase = HttpContext.Request.GetDisplayUrl();
+                        var path = pathBase.Replace(pathUrl.Value, "/lib/img/Skilltest_img/");
+                        var Systemname = AppDomain.CurrentDomain.FriendlyName;
+                        var fullDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+                        var DirectSplit = fullDirectory.Split(Systemname);
+                        var Root = DirectSplit[0] + "\\wwwroot\\lib\\img\\Skilltest_img\\";
+                       // string Root = @"wwwroot\lib\img\Skilltest_img"; // Path
+                        //string Root = @"\\10.29.1.116\G$\TEC_Train_Dept\Program\TestSkill_Image";
                         string fileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + "." + FileType;  // Make File Name Random
-                        TextHTML = TextHTML.Replace(PictrueText, @"http://10.29.1.116/SkillTestPicture/TestSkill_Image/" + fileName);   //---------- Replase
+                        TextHTML = TextHTML.Replace(PictrueText, path + fileName);   //---------- Replase
+                        //TextHTML = TextHTML.Replace(PictrueText, @"http://10.29.1.116/SkillTestPicture/TestSkill_Image/" + fileName);
                         PictrueText = PictrueText.Replace("data:image/" + FileType + ";base64,", "");                    //------- Set file for convert                               
 
                         //--------- Convert File ----------------
@@ -342,7 +353,7 @@ namespace RISTExamOnlineProject.Controllers
           , string[] Ans_Value, string Need_value, string Text_Question, string TextHTML_Question, string Job, string OP_UPD, int DisplayOrder, int Rewrite_Master,
            string[][] Ans_Picture, string[] Question_Picture)
         {
-
+           
             mgrSQLcommand_Exam ObjRun = new mgrSQLcommand_Exam(_configuration);
 
 
@@ -350,13 +361,12 @@ namespace RISTExamOnlineProject.Controllers
             string MS;
 
 
-
             try
             {
                 //----------------------------  Save File  Question ---------------------------
                 if (Question_Picture.Length > 0)
                 {
-                    for (int i = 0; i <= Question_Picture.Length - 1; i++)
+                    for (int i = 0; i < Question_Picture.Length; i++)
                     {
                         TextHTML_Question = SavePictrue(TextHTML_Question, Question_Picture[i]);
                     }
@@ -364,7 +374,7 @@ namespace RISTExamOnlineProject.Controllers
 
                 }
 
-                for (int x = 0; x <= Ans_Picture.Length - 1; x++)
+                for (int x = 0; x < Ans_Picture.Length; x++)
                 {
 
                     int Count = Convert.ToInt32(Ans_Picture[x][0]);
@@ -410,7 +420,7 @@ namespace RISTExamOnlineProject.Controllers
                     MS = ObjRun.Valueslist_Management(Job, ValueCodeQuestion, Max_Seq, TextHTML_Question, Text_Question, "0", Need_value, IP, OP_UPD, "", "", Rewrite_Master);
                     if (MS != "OK")
                     {
-                        return Json(new { success = false, responseText = MS });
+                        return Json(new { success = false, responseText = MS , errList = "insert Qeustion" });
                     }
                     //----------- inseart Anser ----
 
@@ -431,7 +441,7 @@ namespace RISTExamOnlineProject.Controllers
 
                         if (MS != "OK")
                         {
-                            return Json(new { success = false, responseText = MS });
+                            return Json(new { success = false, responseText = MS, errList = "insert Answer MS!= ok " });
                         }
                     }
                 }
@@ -441,7 +451,7 @@ namespace RISTExamOnlineProject.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, responseText = ex.Message.ToString() });
+                return Json(new { success = false, responseText = ex.Message.ToString() , errList = "Catch : " + ex });
                 throw;
             }
 

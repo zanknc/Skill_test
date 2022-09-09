@@ -61,14 +61,15 @@ namespace RISTExamOnlineProject.Controllers
         {
 
 
-
+            var datasplit = Staffcode.Split('?');
+            var Staffcode_ = datasplit[0];
             var dt = new DataTable();
             var SqlCMD = new SqlCommand();
             try
             {
                 mgrSQL_ObjCommand ObjRun = new mgrSQL_ObjCommand(_configuration);
                 //------------ check permit ----------
-                string Strsql = "select *   FROM [SPTOSystem].[dbo].[vewPlan_Trainee] where [Staffcode] = '" + Staffcode + "' and [Trianer] = '" + OPID + "' and  [Plan_ID] = '" + PlanID + "' and License_Name = '" + LicenseName + "' ";
+                string Strsql = "select *   FROM [SPTOSystem].[dbo].[vewPlan_Trainee] where [Staffcode] = '" + Staffcode_ + "' and [Trianer] = '" + OPID + "' and  [Plan_ID] = '" + datasplit[1] + "' and License_Name = '" + datasplit[2] + "' ";
                 SqlCMD = new SqlCommand();
                 SqlCMD.CommandType = CommandType.Text;
                 SqlCMD.CommandText = Strsql;
@@ -105,9 +106,13 @@ namespace RISTExamOnlineProject.Controllers
         [Authorize]
         public IActionResult GetPlanID(string OPID, string Staffcode)
         {
+            var datasplit = Staffcode.Split('?');
+            var Staffcode1 = datasplit[0];
+            var PlanID = datasplit[1];
+
             mgrSQL_ObjCommand ObjRun = new mgrSQL_ObjCommand(_configuration);
             DataTable dt = new DataTable();
-            string Strsql = "SELECT  [PlanID],[LicenseName]  FROM [dbo].[vewPracticalSnapshotRemainList] where Staffcode = '" + Staffcode + "' and Trianer = '" + OPID + "' group by [PlanID],[LicenseName]  ";
+            string Strsql = "SELECT  [PlanID],[LicenseName]  FROM [dbo].[vewPracticalSnapshotRemainList] where Staffcode = '" + Staffcode1 + "' and Trianer = '" + OPID + "'and PlanID = '" + PlanID + "'  group by [PlanID],[LicenseName]  ";
 
             SqlCommand SqlCMD = new SqlCommand();
             SqlCMD = new SqlCommand();
@@ -246,7 +251,10 @@ namespace RISTExamOnlineProject.Controllers
             mgrSQLcommand_Practical ObjRun_Practical = new mgrSQLcommand_Practical(_configuration);
 
             // TimeSpan ts = TimeSpan.FromTicks(486000000000)
-
+            var strsplit = Staffcode.Split('?');
+            var staff_ID = strsplit[0];
+            var Plan_ID = strsplit[1];
+            var License_Name = strsplit[2];
             TimeSpan ActualTime = new TimeSpan();
             ActualTime = TimeSpan.FromSeconds(ActualTime_Seconds);
 
@@ -261,7 +269,7 @@ namespace RISTExamOnlineProject.Controllers
             }
 
             dt = new DataTable();
-            dt = ObjRun_Practical.sprPracticalSnapshot(Flag, Staffcode, PlanID, LicenseName, ItemID, QuestionNo, HearingJudge, ActualTime, PracticalJudge, Judge, OPID);
+            dt = ObjRun_Practical.sprPracticalSnapshot(Flag, staff_ID, Plan_ID, License_Name, ItemID, QuestionNo, HearingJudge, ActualTime, PracticalJudge, Judge, OPID);
 
             if (dt.Rows.Count != 0)
             {
@@ -448,6 +456,36 @@ namespace RISTExamOnlineProject.Controllers
 
             return View();
 
+        }
+        [Authorize]
+        public IActionResult PracticalManagement()
+        {
+
+            return View();
+
+        }
+
+        [Authorize]
+        public JsonResult check_PracticalResults(string Staffcode_,string PlanID_List_, string LicenseName_List_)
+        {
+
+            mgrSQL_ObjCommand ObjRun = new mgrSQL_ObjCommand(_configuration);
+            DataTable dt = new DataTable();
+            var strsplit = Staffcode_.Split('?');
+            var StaffID = strsplit[0].Trim();
+            var PlanID = strsplit[1].Trim(); ;
+
+            List<vewPlan_Trainee> Detail = new List<vewPlan_Trainee>();
+
+            SqlCommand SqlCMD = new SqlCommand();
+            string Strdql = "SELECT count(*) as count  FROM [SPTOSystem].[dbo].[PracticalSnapshot] where Staffcode = '" + StaffID + "'and  PlanID = '"+ PlanID + " ' and    LicenseName = '"+ LicenseName_List_.Trim() + "'  and 	Judge is not null    ";
+
+
+            SqlCMD.CommandType = CommandType.Text;
+            SqlCMD.CommandText = Strdql;
+            dt = new DataTable();
+            dt = ObjRun.GetDataTable(SqlCMD);
+            return Json(dt.Rows[0][0]);
         }
         [Authorize]
 

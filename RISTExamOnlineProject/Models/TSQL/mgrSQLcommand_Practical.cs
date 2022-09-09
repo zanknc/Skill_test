@@ -55,12 +55,16 @@ namespace RISTExamOnlineProject.Models.TSQL
 
 
         public DataTable sprMakeDisplayPractical(string Staffcode, string PlanID, string ItemID, string LicenseName) {
-            
+
+            var strSplit = Staffcode.Split('?');
+            Staffcode = strSplit[0];
+            PlanID = strSplit[1];
+            LicenseName = strSplit[2];
             mgrSQL_ObjCommand ObjRun = new mgrSQL_ObjCommand(_configuration);
             SqlCommand SqlCMD = new SqlCommand();
             SqlCMD = new SqlCommand();
             SqlCMD.CommandType = CommandType.StoredProcedure;
-            SqlCMD.CommandText = "sprMakeDisplayPractical";
+            SqlCMD.CommandText = "Test_sprMakeDisplayPractical";
             SqlCMD.Parameters.Add("@Staffcode", SqlDbType.NVarChar).Value = Staffcode.Trim();
             SqlCMD.Parameters.Add("@Plan_ID", SqlDbType.NVarChar).Value = PlanID.Trim();
             SqlCMD.Parameters.Add("@ItemID", SqlDbType.NVarChar).Value = ItemID.Trim();
