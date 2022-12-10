@@ -413,7 +413,7 @@ namespace RISTExamOnlineProject.Models.TSQL
                 dt = ObjRun.GetDatatables(strSQL);
                 if (dt.Rows.Count > 0)
                 {
-                    strPlan = dt.Rows[0]["Plan"].ToString();
+                    strPlan = dt.Rows[dt.Rows.Count - 1]["Plan"].ToString();
                     strLevel = "";
                     Standard = Convert.ToDouble(dt.Rows[0]["Standard"].ToString());
                 }

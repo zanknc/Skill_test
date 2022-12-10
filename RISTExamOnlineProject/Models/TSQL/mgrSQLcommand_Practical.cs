@@ -64,7 +64,7 @@ namespace RISTExamOnlineProject.Models.TSQL
             SqlCommand SqlCMD = new SqlCommand();
             SqlCMD = new SqlCommand();
             SqlCMD.CommandType = CommandType.StoredProcedure;
-            SqlCMD.CommandText = "Test_sprMakeDisplayPractical";
+            SqlCMD.CommandText = "sprMakeDisplayPractical";
             SqlCMD.Parameters.Add("@Staffcode", SqlDbType.NVarChar).Value = Staffcode.Trim();
             SqlCMD.Parameters.Add("@Plan_ID", SqlDbType.NVarChar).Value = PlanID.Trim();
             SqlCMD.Parameters.Add("@ItemID", SqlDbType.NVarChar).Value = ItemID.Trim();

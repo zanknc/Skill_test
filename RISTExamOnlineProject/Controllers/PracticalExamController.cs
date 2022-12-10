@@ -8,6 +8,7 @@ using FastReport.Export.PdfSimple;
 using FastReport.Utils;
 using FastReport.Web;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,7 +24,7 @@ namespace RISTExamOnlineProject.Controllers
         private readonly IConfiguration _configuration;
         private readonly SPTODbContext _sptoDbContext;
         private readonly IHttpContextAccessor httpContextAccessor;
-
+        private IHostingEnvironment _iHostingEnvironment;
 
         public PracticalExamController(SPTODbContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
@@ -282,6 +283,10 @@ namespace RISTExamOnlineProject.Controllers
                 {
                     return Json(new { success = true, responetext = " บันทึกข้อมูลเรียบร้อยแล้ว", Judge = Judge, finish = true });
                 }
+                else if (MS == "END")
+                {
+                    return Json(new { success = true, responetext = " บันทึกข้อมูลเรียบร้อยแล้ว", Judge = dt.Rows[0][0].ToString(), finish = true });
+                }
                 else
                 {
                     return Json(new { success = false, responetext = MS });
@@ -376,10 +381,15 @@ namespace RISTExamOnlineProject.Controllers
             {
                 ConnectionString = "Data Source=10.29.1.116;Initial Catalog=sptosystem;Persist Security Info=True;User ID=sa;Password=pwpolicy;Application Name=SPTO_SYSTEM"
             };
+
+            //var fullpath = _iHostingEnvironment.ContentRootPath;
+            //var test = _iHostingEnvironment.WebRootPath;
             //sqlConnection.ConnectionString = sqlConnection;
+            //var fullpath = Path.GetFullPath("Untitled.frx");
             sqlConnection.CreateAllTables();
+
             webReport.Report.Dictionary.Connections.Add(sqlConnection);
-            webReport.Report.Load($@"Reports/Untitled.frx");
+            webReport.Report.Load("Reports/Untitled.frx");
             //var string staffop = OPID ;
             //const string planid = "T2220-0001";
             //const string license = "CO1001";
